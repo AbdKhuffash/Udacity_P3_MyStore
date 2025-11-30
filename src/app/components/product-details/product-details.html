@@ -1,0 +1,30 @@
+<a routerLink="/">&larr; Back to products</a>
+
+<div *ngIf="product; else loading" class="details">
+  <img
+    [src]="product.url"
+    [alt]="product.name"
+    class="details-image"
+  >
+
+  <div class="details-info">
+    <h1>{{ product.name }}</h1>
+    <p class="price">{{ product.price | currency }}</p>
+    <p class="description">{{ product.description }}</p>
+
+    <label>
+      Quantity:
+      <input type="number" min="1" [(ngModel)]="quantity" />
+    </label>
+
+    <button (click)="addToCart()">Add to cart</button>
+
+    <div *ngIf="message" class="alert">
+      {{ message }}
+    </div>
+  </div>
+</div>
+
+<ng-template #loading>
+  <p>Loading product...</p>
+</ng-template>

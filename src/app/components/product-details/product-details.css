@@ -1,0 +1,26 @@
+.details {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.details-image {
+  max-width: 300px;
+  border-radius: 8px;
+}
+
+.details-info {
+  max-width: 400px;
+}
+
+.price {
+  font-weight: bold;
+  margin: 0.5rem 0;
+}
+
+.alert {
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  background-color: #d4edda;
+  border-radius: 4px;
+}

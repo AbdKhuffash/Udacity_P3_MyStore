@@ -1,0 +1,12 @@
+<h1>Order Confirmation</h1>
+
+<p *ngIf="name; else noData">
+  Thank you, {{ name }}!<br>
+  Your order total is {{ total | currency }}.
+</p>
+
+<ng-template #noData>
+  <p>Your order has been placed.</p>
+</ng-template>
+
+<a routerLink="/">Back to store</a>
