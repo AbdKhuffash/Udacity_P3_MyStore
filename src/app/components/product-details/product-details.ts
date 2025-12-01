@@ -1,47 +1,40 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { FormsModule } from '@angular/forms';
-
 import { ProductsService } from '../../services/products';
-import { CartService } from '../../services/cart';
 import { Product } from '../../models/product';
+import { Observable } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-product-details',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, RouterLink],
   templateUrl: './product-details.html',
   styleUrl: './product-details.css'
 })
-export class ProductDetailsComponent implements OnInit {
+export class ProductDetailsComponent {
 
-  product?: Product;
-  quantity = 1;
-  message = '';
+  // Product observable for async pipe
+  product$!: Observable<Product | undefined>;
 
   constructor(
     private route: ActivatedRoute,
-    private productsService: ProductsService,
-    private cartService: CartService
-  ) {}
-
-  ngOnInit(): void {
-    const idParam = this.route.snapshot.paramMap.get('id');
-    const id = idParam ? Number(idParam) : NaN;
-
-    if (!isNaN(id)) {
-      this.productsService.getProduct(id).subscribe(p => {
-        this.product = p;
-      });
-    }
-  }
-
-  addToCart(): void {
-    if (!this.product) return;
-
-    this.cartService.addToCart(this.product, this.quantity);
-    this.message = `${this.product.name} (x${this.quantity}) added to cart!`;
-    setTimeout(() => this.message = '', 2000);
+    private productsService: ProductsService
+  ) {
+    this.product$ = this.route.paramMap.pipe(
+      map(params => {
+        const raw = params.get('id');
+        const id = raw ? Number(raw) : NaN;
+        console.log('ProductDetailsComponent → route id =', raw, 'parsed =', id);
+        return id;
+      }),
+      switchMap(id => this.productsService.getProduct(id).pipe(
+        map(product => {
+          console.log('ProductDetailsComponent → loaded product =', product);
+          return product;
+        })
+      ))
+    );
   }
 }

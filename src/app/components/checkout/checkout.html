@@ -1,46 +1,53 @@
-<h1>Checkout</h1>
+<h2>Checkout</h2>
 
 <form #checkoutForm="ngForm" (ngSubmit)="onSubmit(checkoutForm)">
-  <div class="field">
-    <label>Name</label>
+  <!-- NAME -->
+  <label>
+    Name
     <input
+      type="text"
       name="name"
-      [(ngModel)]="name"
       required
       minlength="3"
+      [(ngModel)]="name"
+      (ngModelChange)="validateName()"
     />
-    <div class="error" *ngIf="checkoutForm.submitted && checkoutForm.controls['name']?.invalid">
-      Name must be at least 3 characters.
-    </div>
+  </label>
+  <div class="error" *ngIf="nameError">
+    {{ nameError }}
   </div>
 
-  <div class="field">
-    <label>Address</label>
+  <!-- ADDRESS -->
+  <label>
+    Address
     <input
+      type="text"
       name="address"
-      [(ngModel)]="address"
       required
+      [(ngModel)]="address"
+      (ngModelChange)="validateAddress()"
     />
-    <div class="error" *ngIf="checkoutForm.submitted && checkoutForm.controls['address']?.invalid">
-      Address is required.
-    </div>
+  </label>
+  <div class="error" *ngIf="addressError">
+    {{ addressError }}
   </div>
 
-  <div class="field">
-    <label>Credit Card</label>
+  <!-- CREDIT CARD -->
+  <label>
+    Credit Card
     <input
+      type="text"
       name="creditCard"
-      [(ngModel)]="creditCard"
       required
       minlength="16"
-      maxlength="16"
+      maxlength="19"
+      [(ngModel)]="creditCard"
+      (ngModelChange)="validateCreditCard()"
     />
-    <div class="error" *ngIf="checkoutForm.submitted && checkoutForm.controls['creditCard']?.invalid">
-      Credit card must be 16 digits.
-    </div>
+  </label>
+  <div class="error" *ngIf="creditCardError">
+    {{ creditCardError }}
   </div>
 
-  <button type="submit">
-    Submit order
-  </button>
+  <button type="submit">Submit Order</button>
 </form>

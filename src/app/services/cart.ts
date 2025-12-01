@@ -12,12 +12,16 @@ export interface CartItem {
 export class CartService {
   private items: CartItem[] = [];
 
+  private lastOrder:
+    | { name: string; address: string; creditCard: string; total: number }
+    | null = null;
+
   getItems(): CartItem[] {
     return this.items;
   }
 
   addToCart(product: Product, quantity: number = 1): void {
-    const existing = this.items.find(item => item.product.id === product.id);
+    const existing = this.items.find(i => i.product.id === product.id);
     if (existing) {
       existing.quantity += quantity;
     } else {
@@ -26,7 +30,7 @@ export class CartService {
   }
 
   removeFromCart(productId: number): void {
-    this.items = this.items.filter(item => item.product.id !== productId);
+    this.items = this.items.filter(i => i.product.id !== productId);
   }
 
   clearCart(): void {
@@ -38,5 +42,18 @@ export class CartService {
       (sum, item) => sum + item.product.price * item.quantity,
       0
     );
+  }
+
+  setLastOrder(order: {
+    name: string;
+    address: string;
+    creditCard: string;
+    total: number;
+  }) {
+    this.lastOrder = order;
+  }
+
+  getLastOrder() {
+    return this.lastOrder;
   }
 }

@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
+import { CartService } from '../../services/cart';
 
 @Component({
   selector: 'app-confirmation',
@@ -9,16 +10,17 @@ import { Router, RouterLink } from '@angular/router';
   templateUrl: './confirmation.html',
   styleUrl: './confirmation.css'
 })
-export class ConfirmationComponent {
-
+export class Confirmation {
   name = '';
   total = 0;
 
-  constructor(private router: Router) {
-    const nav = this.router.getCurrentNavigation();
-    const state = nav?.extras?.state as { name?: string; total?: number } | undefined;
+  constructor(private cartService: CartService) {}
 
-    this.name = state?.name ?? '';
-    this.total = state?.total ?? 0;
+  ngOnInit(): void {
+    const order = this.cartService.getLastOrder();
+    if (order) {
+      this.name = order.name;
+      this.total = order.total;
+    }
   }
 }

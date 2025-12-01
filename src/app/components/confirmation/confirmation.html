@@ -1,12 +1,15 @@
-<h1>Order Confirmation</h1>
+<div class="confirmation">
+  <h2>Order Confirmed 🎉</h2>
 
-<p *ngIf="name; else noData">
-  Thank you, {{ name }}!<br>
-  Your order total is {{ total | currency }}.
-</p>
+  <p *ngIf="name">
+    Thank you, <strong>{{ name }}</strong>!
+  </p>
 
-<ng-template #noData>
-  <p>Your order has been placed.</p>
-</ng-template>
+  <p *ngIf="total">
+    Your total was <strong>{{ total | currency }}</strong>.
+  </p>
 
-<a routerLink="/">Back to store</a>
+  <p>Your order has been placed successfully.</p>
+
+  <a routerLink="/">Back to store</a>
+</div>

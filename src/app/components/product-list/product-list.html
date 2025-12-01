@@ -1,34 +1,16 @@
-<h1>Products</h1>
+<h2>Products</h2>
 
-<div *ngIf="message" class="alert">
+<div class="alert" *ngIf="message">
   {{ message }}
 </div>
 
-<div class="product-grid">
-  <div class="product-card" *ngFor="let product of products">
-    <img
-      [src]="product.url"
-      [alt]="product.name"
-      class="product-image"
-    >
-
-    <h2>{{ product.name }}</h2>
-    <p class="price">{{ product.price | currency }}</p>
-    <p class="description">{{ product.description }}</p>
-
-    <div class="actions">
-      <label>
-        Quantity:
-        <input
-          type="number"
-          min="1"
-          [(ngModel)]="quantities[product.id]"
-        />
-      </label>
-
-      <button (click)="addToCart(product)">
-        Add to cart
-      </button>
-    </div>
-  </div>
+<div class="products-grid">
+  <app-product-item
+    *ngFor="let product of products"
+    [product]="product"
+    [quantity]="quantities[product.id]"
+    (quantityChange)="quantities[product.id] = $event"
+    (addToCart)="addToCart(product)"
+  >
+  </app-product-item>
 </div>

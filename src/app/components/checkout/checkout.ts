@@ -11,27 +11,53 @@ import { CartService } from '../../services/cart';
   templateUrl: './checkout.html',
   styleUrl: './checkout.css'
 })
-export class CheckoutComponent {
-
+export class Checkout {
   name = '';
   address = '';
   creditCard = '';
-  submitted = false;
 
-  constructor(
-    private router: Router,
-    private cartService: CartService
-  ) {}
+  nameError = '';
+  addressError = '';
+  creditCardError = '';
 
-  onSubmit(form: NgForm): void {
-    this.submitted = true;
-    if (form.invalid) return;
+  constructor(private cartService: CartService, private router: Router) {}
+
+  validateName() {
+    this.nameError =
+      this.name.trim().length < 3 ? 'Name must be at least 3 characters.' : '';
+  }
+
+  validateAddress() {
+    this.addressError =
+      this.address.trim().length < 5 ? 'Address must be at least 5 characters.' : '';
+  }
+
+  validateCreditCard() {
+    const digits = this.creditCard.replace(/\D/g, '');
+    this.creditCardError =
+      digits.length !== 16 ? 'Credit card must be exactly 16 digits.' : '';
+  }
+
+  onSubmit(form: NgForm) {
+    this.validateName();
+    this.validateAddress();
+    this.validateCreditCard();
+
+    if (form.invalid || this.nameError || this.addressError || this.creditCardError) {
+      return;
+    }
 
     const total = this.cartService.getTotal();
+
+    this.cartService.setLastOrder({
+      name: this.name,
+      address: this.address,
+      creditCard: this.creditCard,
+      total
+    });
+
     this.cartService.clearCart();
 
-    this.router.navigate(['/confirmation'], {
-      state: { name: this.name, total }
-    });
+    this.router.navigate(['/confirmation']);
   }
 }

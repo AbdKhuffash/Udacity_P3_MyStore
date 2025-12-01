@@ -1,34 +1,45 @@
-<h1>Your Cart</h1>
+<h2>Your Cart</h2>
 
-<div *ngIf="items.length === 0">
-  Your cart is empty.
+<div class="alert" *ngIf="message">
+  {{ message }}
 </div>
 
-<div *ngIf="items.length > 0">
-  <table class="cart-table">
-    <thead>
-      <tr>
-        <th>Product</th>
-        <th>Qty</th>
-        <th>Price</th>
-        <th>Subtotal</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let item of items">
-        <td>{{ item.product.name }}</td>
-        <td>{{ item.quantity }}</td>
-        <td>{{ item.product.price | currency }}</td>
-        <td>{{ item.product.price * item.quantity | currency }}</td>
-        <td>
-          <button (click)="remove(item.product.id)">Remove</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+<div *ngIf="items.length === 0">
+  <p>Your cart is empty.</p>
+  <a routerLink="/">Back to store</a>
+</div>
 
-  <h2>Total: {{ total | currency }}</h2>
+<table *ngIf="items.length > 0">
+  <thead>
+    <tr>
+      <th>Product</th>
+      <th>Price</th>
+      <th>Quantity</th>
+      <th>Subtotal</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of items">
+      <td>{{ item.product.name }}</td>
+      <td>{{ item.product.price | currency }}</td>
+      <td>
+        <input
+          type="number"
+          min="1"
+          [(ngModel)]="item.quantity"
+          (ngModelChange)="updateQuantity(item, $event)"
+        />
+      </td>
+      <td>{{ item.product.price * item.quantity | currency }}</td>
+      <td>
+        <button (click)="removeItem(item)">Remove</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
 
-  <button (click)="clear()">Clear cart</button>
+<div *ngIf="items.length > 0" class="cart-footer">
+  <p>Total: <strong>{{ total | currency }}</strong></p>
+  <a routerLink="/checkout">Proceed to Checkout</a>
 </div>
